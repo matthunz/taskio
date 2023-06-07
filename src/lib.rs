@@ -1,6 +1,8 @@
 #![no_std]
 #![cfg_attr(feature = "generators", feature(generators, generator_trait))]
 
+pub mod stream;
+
 pub mod task;
 pub use task::Task;
 
