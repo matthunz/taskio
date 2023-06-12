@@ -28,4 +28,28 @@ impl<T> Poll<T> {
             Self::Pending => false,
         }
     }
+
+    #[inline]
+    pub fn map<U, F>(self, f: F) -> Poll<U>
+    where
+        F: FnOnce(T) -> U,
+    {
+        match self {
+            Poll::Ready(t) => Poll::Ready(f(t)),
+            Poll::Pending => Poll::Pending,
+        }
+    }
+}
+
+/// Extracts the successful type of a `Poll<T>`.
+///
+/// This macro bakes in propagation of `Pending` signals by returning early.
+#[macro_export]
+macro_rules! ready {
+    ($e:expr $(,)?) => {
+        match $e {
+            $crate::Poll::Ready(t) => t,
+            $crate::Poll::Pending => return $crate::Poll::Pending,
+        }
+    };
 }
