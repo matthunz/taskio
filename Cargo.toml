@@ -5,8 +5,7 @@ edition = "2021"
 
 [features]
 generators = []
-default = ["generators"]
 
 [dependencies]
-futures-util = { version = "0.3.28", default-features = false }
 pin-project-lite = "0.2.9"
+pin-utils = "0.1.0"

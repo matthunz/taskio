@@ -1,25 +1,6 @@
-use pin_project_lite::pin_project;
-use crate::{ready, Poll, Task};
+use crate::{ready, Poll, Stream, Task};
 use core::pin::Pin;
-
-pub trait Stream {
-    type Item;
-
-    fn poll_next(self: Pin<&mut Self>) -> Poll<Option<Self::Item>>;
-
-    fn for_each<T, F>(self, f: F) -> ForEach<Self, T, F>
-    where
-        F: FnMut(Self::Item) -> T,
-        T: Task<Output = ()>,
-        Self: Sized,
-    {
-        ForEach {
-            stream: self,
-            f,
-            task: None,
-        }
-    }
-}
+use pin_project_lite::pin_project;
 
 pin_project! {
     pub struct ForEach<S, T, F> {
@@ -28,6 +9,16 @@ pin_project! {
         f: F,
         #[pin]
         task: Option<T>,
+    }
+}
+
+impl<S, T, F> ForEach<S, T, F> {
+    pub fn new(stream: S, f: F) -> Self {
+        Self {
+            stream,
+            f,
+            task: None,
+        }
     }
 }
 
