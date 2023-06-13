@@ -24,7 +24,7 @@ pub trait Task {
         Pin::new(&mut self).poll()
     }
 
-    fn block_on(mut self) -> Self::Output
+    fn block(mut self) -> Self::Output
     where
         Self: Sized + Unpin,
     {

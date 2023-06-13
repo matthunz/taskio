@@ -1,13 +1,21 @@
+//! Abstractions for asynchronous programming.
+//!
+//! This crate provides a number of core abstractions for writing asynchronous code:
+//! - [`Task`]:  A single eventual values produced by asynchronous computations.
+//! - [`Stream`]: A series of values produced asynchronously.
+
 #![no_std]
 #![cfg_attr(feature = "generators", feature(generators, generator_trait))]
+
+pub use pin_utils::pin_mut;
+
+pub mod io;
 
 pub mod stream;
 pub use stream::Stream;
 
 pub mod task;
 pub use task::Task;
-
-pub use pin_utils::pin_mut;
 
 /// Indicates whether a value is available or still pending.
 ///
