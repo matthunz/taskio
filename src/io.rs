@@ -1,6 +1,6 @@
-use pin_project_lite::pin_project;
 use crate::{Poll, Task};
 use core::pin::Pin;
+use pin_project_lite::pin_project;
 
 pub trait Read {
     type Error;

@@ -1,4 +1,4 @@
-//! Abstractions for async embedded programming.
+//! Abstractions for non-blocking programming.
 //!
 //! This crate provides a number of core abstractions for writing asynchronous code:
 //! - [`Task`]:  A single eventual values produced by asynchronous computations.
@@ -6,6 +6,7 @@
 
 #![no_std]
 #![cfg_attr(feature = "generators", feature(generators, generator_trait))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 pub use pin_utils::pin_mut;
 
@@ -50,6 +51,18 @@ impl<T> Poll<T> {
     }
 }
 
+#[cfg(feature = "nb")]
+#[cfg_attr(docsrs, doc(cfg(feature = "nb")))]
+impl<T, E> From<nb::Result<T, E>> for Poll<Result<T, E>> {
+    fn from(value: nb::Result<T, E>) -> Self {
+        match value {
+            Ok(out) => Poll::Ready(Ok(out)),
+            Err(nb::Error::Other(error)) => Poll::Ready(Err(error)),
+            Err(nb::Error::WouldBlock) => Poll::Pending,
+        }
+    }
+}
+
 /// Extracts the successful type of a `Poll<T>`.
 ///
 /// This macro bakes in propagation of `Pending` signals by returning early.
@@ -63,7 +76,6 @@ macro_rules! ready {
     };
 }
 
-#[cfg(feature = "generators")]
 /// ```
 /// #![feature(generators)]
 ///
@@ -79,6 +91,8 @@ macro_rules! ready {
 ///
 /// assert!(task.poll().is_ready());
 /// ```
+#[cfg(feature = "generators")]
+#[cfg_attr(docsrs, doc(cfg(feature = "generators")))]
 #[macro_export]
 macro_rules! wait {
     ($e:expr $(,)?) => {

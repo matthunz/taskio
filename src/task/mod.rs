@@ -2,6 +2,7 @@ use crate::Poll;
 use core::pin::Pin;
 
 #[cfg(feature = "generators")]
+#[cfg_attr(docsrs, doc(cfg(feature = "generators")))]
 mod from_generator;
 #[cfg(feature = "generators")]
 pub use from_generator::{from_generator, FromGenerator};

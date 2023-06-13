@@ -1,11 +1,20 @@
 [package]
 name = "taskio"
-version = "0.1.0"
+version = "0.1.0-alpha-1"
 edition = "2021"
+license = "MIT OR Apache-2.0"
+description = "Abstractions for non-blocking tasks and IO"
+repository = "https://github.com/matthunz/async-hal"
 
 [features]
 generators = []
+full = ["nb"]
 
 [dependencies]
+nb = { version = "1.1.0", optional = true }
 pin-project-lite = "0.2.9"
 pin-utils = "0.1.0"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
