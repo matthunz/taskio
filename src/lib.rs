@@ -1,4 +1,4 @@
-//! Abstractions for asynchronous programming.
+//! Abstractions for async embedded programming.
 //!
 //! This crate provides a number of core abstractions for writing asynchronous code:
 //! - [`Task`]:  A single eventual values produced by asynchronous computations.
